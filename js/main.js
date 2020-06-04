@@ -38,6 +38,10 @@ var PHOTOS_PATTERN = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 
+var X_MIN = 300;
+var X_MAX = 900;
+var Y_MIN = 130;
+var Y_MAX = 630;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 
@@ -45,29 +49,29 @@ var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var getRandomAdValue = function (patternName) {
+var getRandomArrValue = function (patternName) {
   return patternName[getRandomInt(0, patternName.length - 1)];
 };
 
-var getSeveralRandomAdValues = function (patternName) {
+var getSeveralRandomArrValues = function (patternName) {
   var allValues = patternName.slice();
-  var adValues = [];
+  var arrValues = [];
   var elementsQuantity = getRandomInt(1, allValues.length);
 
   for (var i = 0; i < elementsQuantity; i++) {
     var currentValueIndex = getRandomInt(0, allValues.length - 1);
     var currentValue = allValues[currentValueIndex];
     allValues.splice(currentValueIndex, 1);
-    adValues.push(currentValue);
+    arrValues.push(currentValue);
   }
 
-  return adValues;
+  return arrValues;
 };
 
-var generateAvatars = function (usersQuantity) {
+var generateAvatars = function () {
   var avatars = [];
 
-  for (var i = 1; i <= usersQuantity; i++) {
+  for (var i = 1; i <= USERS_QUANTITY; i++) {
     avatars.push('img/avatars/user0' + i + '.png');
   }
 
@@ -82,29 +86,29 @@ var getAvatar = function (avatars) {
   return currentAvatar;
 };
 
-var getRandomAds = function () {
+var getRandomAds = function (avatars) {
   var ads = [];
 
   for (var i = 0; i < ADS_QUANTITY; i++) {
-    var randomX = getRandomInt(300, 900);
-    var randomY = getRandomInt(130, 630);
+    var randomX = getRandomInt(X_MIN, X_MAX);
+    var randomY = getRandomInt(Y_MIN, Y_MAX);
 
     var newAd = {
       'author': {
         'avatar': getAvatar(avatars),
       },
       'offer': {
-        'title': getRandomAdValue(TITLE_PATTERN),
+        'title': getRandomArrValue(TITLE_PATTERN),
         'address': randomX + ', ' + randomY,
         'price': getRandomInt(1000, 100000),
-        'type': getRandomAdValue(TYPE_PATTERN),
+        'type': getRandomArrValue(TYPE_PATTERN),
         'rooms': getRandomInt(1, 6),
         'guests': getRandomInt(1, 6),
-        'checkin': getRandomAdValue(CHECKTIME_PATTERN),
-        'checkout': getRandomAdValue(CHECKTIME_PATTERN),
-        'features': getSeveralRandomAdValues(FEATURES_PATTERN),
+        'checkin': getRandomArrValue(CHECKTIME_PATTERN),
+        'checkout': getRandomArrValue(CHECKTIME_PATTERN),
+        'features': getSeveralRandomArrValues(FEATURES_PATTERN),
         'description': '',
-        'photos': getSeveralRandomAdValues(PHOTOS_PATTERN),
+        'photos': getSeveralRandomArrValues(PHOTOS_PATTERN),
       },
       'location': {
         'x': randomX,
@@ -129,18 +133,18 @@ var renderPin = function (ad) {
   return newPin;
 };
 
-var renderPinFragment = function () {
+var renderPinFragment = function (ads) {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderPin(ads[i]));
-  }
+  ads.forEach(function (ad) {
+    fragment.appendChild(renderPin(ad));
+  });
 
   return fragment;
 };
 
 var avatars = generateAvatars(USERS_QUANTITY);
-var ads = getRandomAds();
+var ads = getRandomAds(avatars);
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -148,6 +152,6 @@ map.classList.remove('map--faded');
 var pinsList = map.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-var pinFragment = renderPinFragment();
+var pinFragment = renderPinFragment(ads);
 
 pinsList.appendChild(pinFragment);
