@@ -3,6 +3,12 @@
 var ADS_QUANTITY = 8;
 var USERS_QUANTITY = 8;
 
+var TYPE_PATTERN = {
+  'palace': 'Дворец',
+  'flat': 'Квартира',
+  'house': 'Дом',
+  'bungalo': 'Бунгало',
+};
 var TITLE_PATTERN = [
   'Огромное поместье на окраине города',
   'Загородное поместье напротив лесной чащи',
@@ -12,12 +18,6 @@ var TITLE_PATTERN = [
   'Загородный дом с бассейном и садом',
   'Загородное бунгало',
   'Бунгало напротив живописного парка',
-];
-var TYPE_PATTERN = [
-  'palace',
-  'flat',
-  'house',
-  'bungalo',
 ];
 var CHECKTIME_PATTERN = [
   '12:00',
@@ -47,6 +47,18 @@ var PIN_HEIGHT = 70;
 
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+var getObjValues = function (obj) {
+  var objValues = [];
+
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      objValues.push(obj[key]);
+    }
+  }
+
+  return objValues;
 };
 
 var getRandomArrValue = function (patternName) {
@@ -100,14 +112,14 @@ var getRandomAds = function (avatars) {
       'offer': {
         'title': getRandomArrValue(TITLE_PATTERN),
         'address': randomX + ', ' + randomY,
-        'price': getRandomInt(1000, 100000),
-        'type': getRandomArrValue(TYPE_PATTERN),
+        'price': getRandomInt(1000, 15000),
+        'type': getRandomArrValue(getObjValues(TYPE_PATTERN)),
         'rooms': getRandomInt(1, 6),
         'guests': getRandomInt(1, 6),
         'checkin': getRandomArrValue(CHECKTIME_PATTERN),
         'checkout': getRandomArrValue(CHECKTIME_PATTERN),
         'features': getSeveralRandomArrValues(FEATURES_PATTERN),
-        'description': '',
+        'description': 'Лучшее жилье во всём Токио!',
         'photos': getSeveralRandomArrValues(PHOTOS_PATTERN),
       },
       'location': {
@@ -143,6 +155,45 @@ var renderPinFragment = function (ads) {
   return fragment;
 };
 
+var renderCard = function (ads) {
+  var newCard = cardTemplate.cloneNode(true);
+  var previewAd = ads[0];
+
+  newCard.querySelector('.popup__title').textContent = previewAd.offer.title;
+  newCard.querySelector('.popup__text--address').textContent = previewAd.offer.address;
+  newCard.querySelector('.popup__text--price').textContent = previewAd.offer.price + '₽/ночь';
+  newCard.querySelector('.popup__type').textContent = previewAd.offer.type;
+  newCard.querySelector('.popup__text--capacity').textContent = previewAd.offer.rooms + ' комнаты для ' + previewAd.offer.guests + ' гостей';
+  newCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + previewAd.offer.checkin + ', выезд до ' + previewAd.offer.checkout;
+  newCard.querySelector('.popup__description').textContent = previewAd.offer.description;
+  newCard.querySelector('.popup__avatar').src = previewAd.author.avatar;
+
+  newCard.querySelectorAll('.popup__feature').forEach(function (elem) {
+    elem.classList.add('hidden');
+  });
+
+  previewAd.offer.features.forEach(function (feature) {
+    newCard.querySelector('.popup__feature--' + feature).classList.remove('hidden');
+  });
+
+  var photosContainer = newCard.querySelector('.popup__photos');
+  var photoCard = newCard.querySelector('.popup__photos').querySelector('.popup__photo');
+  var photoCardFragment = document.createDocumentFragment();
+  while (photosContainer.firstChild) {
+    photosContainer.removeChild(photosContainer.firstChild);
+  }
+
+  previewAd.offer.photos.forEach(function (photo) {
+    var newPhotoCard = photoCard.cloneNode(true);
+    newPhotoCard.src = photo;
+    photoCardFragment.appendChild(newPhotoCard);
+  });
+
+  photosContainer.appendChild(photoCardFragment);
+
+  return newCard;
+};
+
 var avatars = generateAvatars(USERS_QUANTITY);
 var ads = getRandomAds(avatars);
 
@@ -151,7 +202,11 @@ map.classList.remove('map--faded');
 
 var pinsList = map.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
 var pinFragment = renderPinFragment(ads);
 
+var mapFilters = map.querySelector('.map__filters-container');
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var card = renderCard(ads);
+
 pinsList.appendChild(pinFragment);
+map.insertBefore(card, mapFilters);
