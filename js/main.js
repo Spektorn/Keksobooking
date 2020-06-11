@@ -62,6 +62,25 @@ var housingTypeToName = {
   'bungalo': 'Бунгало',
 };
 
+var roomsQuantityToMessage = {
+  '1': {
+    guestsQuantity: [1],
+    validityMessage: 'Выберите другое количество гостей. Для 1 комнаты возможны варианты: 1 гость.',
+  },
+  '2': {
+    guestsQuantity: [1, 2],
+    validityMessage: 'Выберите другое количество гостей. Для 2 комнат возможны варианты: 1 гость, 2 гостя.',
+  },
+  '3': {
+    guestsQuantity: [1, 2, 3],
+    validityMessage: 'Выберите другое количество гостей. Для 3 комнат возможны варианты: 1 гость, 2 гостя, 3 гостя.',
+  },
+  '100': {
+    guestsQuantity: [0],
+    validityMessage: 'Выберите другое количество гостей. Для 100 комнат возможны варианты: не для гостей.',
+  },
+};
+
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -199,11 +218,66 @@ var renderCard = function (ads) {
   return newCard;
 };
 
+var mainPinClickHandler = function () {
+  mapElement.classList.remove('map--faded');
+  adFormElement.classList.remove('ad-form--disabled');
+
+  adFormFieldsetsElement.forEach(function (fieldset) {
+    fieldset.disabled = false;
+  });
+
+  pinsListElement.appendChild(pinFragment);
+  mapElement.insertBefore(card, mapFiltersElement);
+};
+
+var roomsQuantityInputHandler = function () {
+  var roomsValue = adFormRoomsInputElement.value;
+  var guestsValue = adFormGuestsInputElement.value;
+  var validityMessage = '';
+
+
+  for (var rooms in roomsQuantityToMessage) {
+    for (var i = 0; i < rooms[guestsQuantity].length; i++) {
+
+    }
+  });
+
+
+  /*
+  switch (roomsValue) {
+    case '1':
+      if (guestsValue !== '1') {
+        validityMessage = 'Выберите другое количество гостей.';
+      }
+      break;
+
+    case '2':
+      if (guestsValue !== '1' && guestsValue !== '2') {
+        validityMessage = 'Выберите другое количество гостей.';
+      }
+      break;
+
+    case '3':
+      if (guestsValue === '0') {
+        validityMessage = 'Выберите другое количество гостей.';
+      }
+      break;
+
+    case '100':
+      if (guestsValue !== '0') {
+        validityMessage = 'Выберите другое количество гостей.';
+      }
+      break;
+  }
+  */
+
+  adFormGuestsInputElement.setCustomValidity(validityMessage);
+};
+
 var avatars = generateAvatars(USERS_QUANTITY);
 var ads = getRandomAds(avatars);
 
 var mapElement = document.querySelector('.map');
-mapElement.classList.remove('map--faded');
 
 var pinsListElement = mapElement.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -213,5 +287,35 @@ var mapFiltersElement = mapElement.querySelector('.map__filters-container');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var card = renderCard(ads);
 
-pinsListElement.appendChild(pinFragment);
-mapElement.insertBefore(card, mapFiltersElement);
+var adFormElement = document.querySelector('.ad-form');
+var adFormFieldsetsElement = adFormElement.querySelectorAll('fieldset');
+
+adFormFieldsetsElement.forEach(function (fieldset) {
+  fieldset.disabled = true;
+});
+
+var mapPinMainElement = mapElement.querySelector('.map__pin--main');
+
+mapPinMainElement.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    mainPinClickHandler();
+  }
+});
+
+mapPinMainElement.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 13) {
+    mainPinClickHandler();
+  }
+});
+
+var adFormRoomsInputElement = adFormElement.querySelector('#room_number');
+var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
+
+adFormRoomsInputElement.addEventListener('input', function () {
+  roomsQuantityInputHandler();
+});
+
+adFormGuestsInputElement.addEventListener('input', function () {
+  roomsQuantityInputHandler();
+});
+
