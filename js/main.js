@@ -64,19 +64,19 @@ var housingTypeToName = {
 
 var roomsQuantityToMessage = {
   '1': {
-    guestsQuantity: [1],
+    guestsQuantity: ['1'],
     validityMessage: 'Выберите другое количество гостей. Для 1 комнаты возможны варианты: 1 гость.',
   },
   '2': {
-    guestsQuantity: [1, 2],
+    guestsQuantity: ['1', '2'],
     validityMessage: 'Выберите другое количество гостей. Для 2 комнат возможны варианты: 1 гость, 2 гостя.',
   },
   '3': {
-    guestsQuantity: [1, 2, 3],
+    guestsQuantity: ['1', '2', '3'],
     validityMessage: 'Выберите другое количество гостей. Для 3 комнат возможны варианты: 1 гость, 2 гостя, 3 гостя.',
   },
   '100': {
-    guestsQuantity: [0],
+    guestsQuantity: ['0'],
     validityMessage: 'Выберите другое количество гостей. Для 100 комнат возможны варианты: не для гостей.',
   },
 };
@@ -233,43 +233,16 @@ var mainPinClickHandler = function () {
 var roomsQuantityInputHandler = function () {
   var roomsValue = adFormRoomsInputElement.value;
   var guestsValue = adFormGuestsInputElement.value;
-  var validityMessage = '';
 
+  var currentRooms = roomsQuantityToMessage[roomsValue];
+  var validityMessage = currentRooms['validityMessage'];
 
-  for (var rooms in roomsQuantityToMessage) {
-    for (var i = 0; i < rooms[guestsQuantity].length; i++) {
-
+  for (var i = 0; i < currentRooms['guestsQuantity'].length; i++) {
+    if (guestsValue === currentRooms['guestsQuantity'][i]) {
+      validityMessage = '';
+      break;
     }
-  });
-
-
-  /*
-  switch (roomsValue) {
-    case '1':
-      if (guestsValue !== '1') {
-        validityMessage = 'Выберите другое количество гостей.';
-      }
-      break;
-
-    case '2':
-      if (guestsValue !== '1' && guestsValue !== '2') {
-        validityMessage = 'Выберите другое количество гостей.';
-      }
-      break;
-
-    case '3':
-      if (guestsValue === '0') {
-        validityMessage = 'Выберите другое количество гостей.';
-      }
-      break;
-
-    case '100':
-      if (guestsValue !== '0') {
-        validityMessage = 'Выберите другое количество гостей.';
-      }
-      break;
   }
-  */
 
   adFormGuestsInputElement.setCustomValidity(validityMessage);
 };
