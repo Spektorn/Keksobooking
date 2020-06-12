@@ -54,12 +54,35 @@ var Y_MIN = 130;
 var Y_MAX = 630;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_HEIGHT = 84;
+var MAIN_PIN_DEFAULT_X = 570;
+var MAIN_PIN_DEFAULT_Y = 375;
 
 var housingTypeToName = {
   'palace': 'Дворец',
   'flat': 'Квартира',
   'house': 'Дом',
   'bungalo': 'Бунгало',
+};
+
+var roomsQuantityToMessage = {
+  '1': {
+    guestsQuantity: ['1'],
+    validityMessage: 'Выберите другое количество гостей. Для 1 комнаты возможны варианты: 1 гость.',
+  },
+  '2': {
+    guestsQuantity: ['1', '2'],
+    validityMessage: 'Выберите другое количество гостей. Для 2 комнат возможны варианты: 1 гость, 2 гостя.',
+  },
+  '3': {
+    guestsQuantity: ['1', '2', '3'],
+    validityMessage: 'Выберите другое количество гостей. Для 3 комнат возможны варианты: 1 гость, 2 гостя, 3 гостя.',
+  },
+  '100': {
+    guestsQuantity: ['0'],
+    validityMessage: 'Выберите другое количество гостей. Для 100 комнат возможны варианты: не для гостей.',
+  },
 };
 
 var getRandomInt = function (min, max) {
@@ -199,19 +222,96 @@ var renderCard = function (ads) {
   return newCard;
 };
 
+var getAddress = function () {
+  var locationX;
+  var locationY;
+
+  if (mapElement.classList.contains('map--faded')) {
+    locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
+    locationY = MAIN_PIN_DEFAULT_Y + MAIN_PIN_WIDTH / 2;
+  } else {
+    locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
+    locationY = MAIN_PIN_DEFAULT_Y + MAIN_PIN_HEIGHT;
+  }
+
+  var location = locationX + ', ' + locationY;
+
+  return location;
+};
+
+var mainPinClickHandler = function () {
+  mapElement.classList.remove('map--faded');
+  adFormElement.classList.remove('ad-form--disabled');
+
+  adFormFieldsetsElement.forEach(function (fieldset) {
+    fieldset.disabled = false;
+  });
+
+  adFormAddressInputElement.value = getAddress();
+
+  pinsListElement.appendChild(pinFragment);
+  mapElement.insertBefore(card, mapFiltersElement);
+};
+
+var roomsQuantityInputHandler = function () {
+  var roomsValue = adFormRoomsInputElement.value;
+  var guestsValue = adFormGuestsInputElement.value;
+
+  var currentRooms = roomsQuantityToMessage[roomsValue];
+  var validityMessage = currentRooms['validityMessage'];
+
+  for (var i = 0; i < currentRooms['guestsQuantity'].length; i++) {
+    if (guestsValue === currentRooms['guestsQuantity'][i]) {
+      validityMessage = '';
+      break;
+    }
+  }
+
+  adFormGuestsInputElement.setCustomValidity(validityMessage);
+};
+
 var avatars = generateAvatars(USERS_QUANTITY);
 var ads = getRandomAds(avatars);
 
 var mapElement = document.querySelector('.map');
-mapElement.classList.remove('map--faded');
-
+var mainPinElement = mapElement.querySelector('.map__pin--main');
 var pinsListElement = mapElement.querySelector('.map__pins');
+var mapFiltersElement = mapElement.querySelector('.map__filters-container');
+
+var adFormElement = document.querySelector('.ad-form');
+var adFormFieldsetsElement = adFormElement.querySelectorAll('fieldset');
+var adFormAddressInputElement = adFormElement.querySelector('#address');
+var adFormRoomsInputElement = adFormElement.querySelector('#room_number');
+var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
+
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var pinFragment = renderPinFragment(ads);
 
-var mapFiltersElement = mapElement.querySelector('.map__filters-container');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 var card = renderCard(ads);
 
-pinsListElement.appendChild(pinFragment);
-mapElement.insertBefore(card, mapFiltersElement);
+adFormAddressInputElement.value = getAddress();
+
+adFormFieldsetsElement.forEach(function (fieldset) {
+  fieldset.disabled = true;
+});
+
+mainPinElement.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    mainPinClickHandler();
+  }
+});
+
+mainPinElement.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 13) {
+    mainPinClickHandler();
+  }
+});
+
+adFormRoomsInputElement.addEventListener('input', function () {
+  roomsQuantityInputHandler();
+});
+
+adFormGuestsInputElement.addEventListener('input', function () {
+  roomsQuantityInputHandler();
+});
