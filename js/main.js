@@ -54,6 +54,10 @@ var Y_MIN = 130;
 var Y_MAX = 630;
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_HEIGHT = 84;
+var MAIN_PIN_DEFAULT_X = 570;
+var MAIN_PIN_DEFAULT_Y = 375;
 
 var housingTypeToName = {
   'palace': 'Дворец',
@@ -218,6 +222,23 @@ var renderCard = function (ads) {
   return newCard;
 };
 
+var getAddress = function () {
+  var locationX;
+  var locationY;
+
+  if (mapElement.classList.contains('map--faded')) {
+    locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
+    locationY = MAIN_PIN_DEFAULT_Y + MAIN_PIN_WIDTH / 2;
+  } else {
+    locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
+    locationY = MAIN_PIN_DEFAULT_Y + MAIN_PIN_HEIGHT;
+  }
+
+  var location = locationX + ', ' + locationY;
+
+  return location;
+};
+
 var mainPinClickHandler = function () {
   mapElement.classList.remove('map--faded');
   adFormElement.classList.remove('ad-form--disabled');
@@ -225,6 +246,8 @@ var mainPinClickHandler = function () {
   adFormFieldsetsElement.forEach(function (fieldset) {
     fieldset.disabled = false;
   });
+
+  adFormAddressInputElement.value = getAddress();
 
   pinsListElement.appendChild(pinFragment);
   mapElement.insertBefore(card, mapFiltersElement);
@@ -251,38 +274,39 @@ var avatars = generateAvatars(USERS_QUANTITY);
 var ads = getRandomAds(avatars);
 
 var mapElement = document.querySelector('.map');
-
+var mainPinElement = mapElement.querySelector('.map__pin--main');
 var pinsListElement = mapElement.querySelector('.map__pins');
-var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var pinFragment = renderPinFragment(ads);
-
 var mapFiltersElement = mapElement.querySelector('.map__filters-container');
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-var card = renderCard(ads);
 
 var adFormElement = document.querySelector('.ad-form');
 var adFormFieldsetsElement = adFormElement.querySelectorAll('fieldset');
+var adFormAddressInputElement = adFormElement.querySelector('#address');
+var adFormRoomsInputElement = adFormElement.querySelector('#room_number');
+var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
+
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var pinFragment = renderPinFragment(ads);
+
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var card = renderCard(ads);
+
+adFormAddressInputElement.value = getAddress();
 
 adFormFieldsetsElement.forEach(function (fieldset) {
   fieldset.disabled = true;
 });
 
-var mapPinMainElement = mapElement.querySelector('.map__pin--main');
-
-mapPinMainElement.addEventListener('mousedown', function (evt) {
+mainPinElement.addEventListener('mousedown', function (evt) {
   if (evt.button === 0) {
     mainPinClickHandler();
   }
 });
 
-mapPinMainElement.addEventListener('keydown', function (evt) {
+mainPinElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === 13) {
     mainPinClickHandler();
   }
 });
-
-var adFormRoomsInputElement = adFormElement.querySelector('#room_number');
-var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
 
 adFormRoomsInputElement.addEventListener('input', function () {
   roomsQuantityInputHandler();
@@ -291,4 +315,3 @@ adFormRoomsInputElement.addEventListener('input', function () {
 adFormGuestsInputElement.addEventListener('input', function () {
   roomsQuantityInputHandler();
 });
-
