@@ -223,14 +223,12 @@ var renderCard = function (ads) {
 };
 
 var getAddress = function () {
-  var locationX;
+  var locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
   var locationY;
 
   if (mapElement.classList.contains('map--faded')) {
-    locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
     locationY = MAIN_PIN_DEFAULT_Y + MAIN_PIN_WIDTH / 2;
   } else {
-    locationX = MAIN_PIN_DEFAULT_X + MAIN_PIN_WIDTH / 2;
     locationY = MAIN_PIN_DEFAULT_Y + MAIN_PIN_HEIGHT;
   }
 
