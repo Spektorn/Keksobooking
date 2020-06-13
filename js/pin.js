@@ -6,6 +6,7 @@ window.pin = (function () {
   var renderPin = function (ad) {
     var newPin = pinTemplate.cloneNode(true);
 
+    newPin.id = ad.id;
     newPin.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
     newPin.style.top = ad.location.y - window.constants.PIN_HEIGHT + 'px';
     newPin.querySelector('img').src = ad.author.avatar;

@@ -10,9 +10,25 @@ window.card = (function () {
     'bungalo': 'Бунгало',
   };
 
-  var renderCard = function (ads) {
+  var renderCard = function (previewAd) {
     var newCard = cardTemplate.cloneNode(true);
-    var previewAd = ads[0];
+    var popupCloseButtonElement = newCard.querySelector('.popup__close');
+
+    var cardCloseClickHandler = function (evt) {
+      evt.preventDefault();
+      newCard.remove();
+
+      document.removeEventListener('keydown', cardCloseEscPressHandler);
+    };
+
+    var cardCloseEscPressHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        newCard.remove();
+
+        document.removeEventListener('keydown', cardCloseEscPressHandler);
+      }
+    };
 
     newCard.querySelector('.popup__title').textContent = previewAd.offer.title;
     newCard.querySelector('.popup__text--address').textContent = previewAd.offer.address;
@@ -23,8 +39,8 @@ window.card = (function () {
     newCard.querySelector('.popup__description').textContent = previewAd.offer.description;
     newCard.querySelector('.popup__avatar').src = previewAd.author.avatar;
 
-    newCard.querySelectorAll('.popup__feature').forEach(function (elem) {
-      elem.classList.add('hidden');
+    newCard.querySelectorAll('.popup__feature').forEach(function (featureElem) {
+      featureElem.classList.add('hidden');
     });
 
     previewAd.offer.features.forEach(function (feature) {
@@ -46,12 +62,13 @@ window.card = (function () {
 
     photosPopupElement.appendChild(photoPopupFragment);
 
+    popupCloseButtonElement.addEventListener('click', cardCloseClickHandler);
+    document.addEventListener('keydown', cardCloseEscPressHandler);
+
     return newCard;
   };
 
-  var card = renderCard(window.data.ads);
-
   return {
-    card: card,
+    renderCard: renderCard,
   };
 })();
