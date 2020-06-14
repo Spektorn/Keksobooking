@@ -27,6 +27,7 @@ window.data = (function () {
       var randomY = window.utilities.getRandomInt(window.constants.Y_MIN, window.constants.Y_MAX);
 
       var newAd = {
+        'id': 'ad-' + (i + 1),
         'author': {
           'avatar': getAvatar(avatars),
         },

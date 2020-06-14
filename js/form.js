@@ -3,13 +3,36 @@
 window.form = (function () {
   var adFormElement = document.querySelector('.ad-form');
   var adFormFieldsetsElement = adFormElement.querySelectorAll('fieldset');
+  var adFormTypeInputElement = adFormElement.querySelector('#type');
+  var adFormPriceInputElement = adFormElement.querySelector('#price');
   var adFormAddressInputElement = adFormElement.querySelector('#address');
   var adFormRoomsInputElement = adFormElement.querySelector('#room_number');
   var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
+  var adFormTimeInInputElement = adFormElement.querySelector('#timein');
+  var adFormTimeOutInputElement = adFormElement.querySelector('#timeout');
 
   var mapElement = document.querySelector('.map');
 
-  var roomsQuantityToMessage = {
+  var housingTypeToPrice = {
+    'palace': {
+      minPrice: 10000,
+      validityMessage: 'Укажите другую цену за ночь. Минимальная цена для дворца: 10000.',
+    },
+    'flat': {
+      minPrice: 1000,
+      validityMessage: 'Укажите другую цену за ночь. Минимальная цена для квартиры: 1000.',
+    },
+    'house': {
+      minPrice: 5000,
+      validityMessage: 'Укажите другую цену за ночь. Минимальная цена для дома: 5000.',
+    },
+    'bungalo': {
+      minPrice: 0,
+      validityMessage: 'Укажите другую цену за ночь. Минимальная цена для бунгало: 0.',
+    },
+  };
+
+  var roomsQuantityToGuests = {
     '1': {
       guestsQuantity: ['1'],
       validityMessage: 'Выберите другое количество гостей. Для 1 комнаты возможны варианты: 1 гость.',
@@ -40,6 +63,26 @@ window.form = (function () {
     });
   };
 
+  var typeInputHandler = function () {
+    var typeValue = adFormTypeInputElement.value;
+
+    adFormPriceInputElement.placeholder = housingTypeToPrice[typeValue]['minPrice'];
+  };
+
+  var priceInputHandler = function () {
+    var typeValue = adFormTypeInputElement.value;
+    var priceValue = adFormPriceInputElement.value;
+
+    var currentType = housingTypeToPrice[typeValue];
+    var validityMessage = '';
+
+    if (priceValue < currentType['minPrice']) {
+      validityMessage = currentType['validityMessage'];
+    }
+
+    adFormPriceInputElement.setCustomValidity(validityMessage);
+  };
+
   var getAddress = function () {
     var locationX = window.constants.MAIN_PIN_DEFAULT_X + window.constants.MAIN_PIN_WIDTH / 2;
     var locationY;
@@ -57,13 +100,14 @@ window.form = (function () {
 
   var setAddressInputValue = function () {
     adFormAddressInputElement.value = getAddress();
+    adFormAddressInputElement.readOnly = true;
   };
 
   var roomsQuantityInputHandler = function () {
     var roomsValue = adFormRoomsInputElement.value;
     var guestsValue = adFormGuestsInputElement.value;
 
-    var currentRooms = roomsQuantityToMessage[roomsValue];
+    var currentRooms = roomsQuantityToGuests[roomsValue];
     var validityMessage = currentRooms['validityMessage'];
 
     for (var i = 0; i < currentRooms['guestsQuantity'].length; i++) {
@@ -75,6 +119,25 @@ window.form = (function () {
 
     adFormGuestsInputElement.setCustomValidity(validityMessage);
   };
+
+  var checktimeInputHandler = function (evt) {
+    var timeInValue = adFormTimeInInputElement.value;
+    var timeOutValue = adFormTimeOutInputElement.value;
+
+    if (timeInValue !== timeOutValue) {
+      if (evt.target.id === 'timein') {
+        adFormTimeOutInputElement.value = timeInValue;
+      } else {
+        adFormTimeInInputElement.value = timeOutValue;
+      }
+    }
+  };
+
+  adFormTypeInputElement.addEventListener('input', typeInputHandler);
+  adFormTypeInputElement.addEventListener('input', priceInputHandler);
+  adFormPriceInputElement.addEventListener('input', priceInputHandler);
+  adFormTimeInInputElement.addEventListener('input', checktimeInputHandler);
+  adFormTimeOutInputElement.addEventListener('input', checktimeInputHandler);
 
   return {
     disableFormInputs: disableFormInputs,
