@@ -67,8 +67,61 @@ window.map = (function () {
     }
   };
 
-  return {
-    mainPinClickHandler: mainPinClickHandler,
-    mainPinPressEnterHandler: mainPinPressEnterHandler,
+  var mainPinMoveHandler = function (evt) {
+    evt.preventDefault();
+
+    var startLocation = {
+      x: evt.clientX,
+      y: evt.clientY,
+    };
+
+    var mouseMoveHandler = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startLocation.x - moveEvt.clientX,
+        y: startLocation.y - moveEvt.clientY,
+      };
+
+      startLocation = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY,
+      };
+
+      var newStyle = {
+        top: (mainPinElement.offsetTop - shift.y),
+        left: (mainPinElement.offsetLeft - shift.x),
+      };
+
+      newStyle.top = (newStyle.top + window.constants.MAIN_PIN_HEIGHT) < window.constants.Y_MIN ?
+        window.constants.Y_MIN - window.constants.MAIN_PIN_HEIGHT : newStyle.top;
+
+      newStyle.top = (newStyle.top + window.constants.MAIN_PIN_HEIGHT) > window.constants.Y_MAX ?
+        window.constants.Y_MAX - window.constants.MAIN_PIN_HEIGHT : newStyle.top;
+
+      newStyle.left = (newStyle.left + window.constants.MAIN_PIN_WIDTH / 2) < 0 ?
+        0 - window.constants.MAIN_PIN_WIDTH / 2 : newStyle.left;
+
+      newStyle.left = (newStyle.left + window.constants.MAIN_PIN_WIDTH / 2) > mapElement.offsetWidth ?
+        mapElement.offsetWidth - window.constants.MAIN_PIN_WIDTH / 2 : newStyle.left;
+
+      mainPinElement.style.top = newStyle.top + 'px';
+      mainPinElement.style.left = newStyle.left + 'px';
+
+      window.form.setAddressInputValue();
+    };
+
+    var mouseUpHandler = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
   };
+
+  mainPinElement.addEventListener('mousedown', mainPinClickHandler);
+  mainPinElement.addEventListener('keydown', mainPinPressEnterHandler);
+  mainPinElement.addEventListener('mousedown', mainPinMoveHandler);
 })();

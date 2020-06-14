@@ -17,7 +17,6 @@ window.card = (function () {
     var cardCloseClickHandler = function (evt) {
       evt.preventDefault();
       newCard.remove();
-
       document.removeEventListener('keydown', cardCloseEscPressHandler);
     };
 
@@ -25,7 +24,6 @@ window.card = (function () {
       if (evt.key === 'Escape') {
         evt.preventDefault();
         newCard.remove();
-
         document.removeEventListener('keydown', cardCloseEscPressHandler);
       }
     };
@@ -34,8 +32,10 @@ window.card = (function () {
     newCard.querySelector('.popup__text--address').textContent = previewAd.offer.address;
     newCard.querySelector('.popup__text--price').textContent = previewAd.offer.price + '₽/ночь';
     newCard.querySelector('.popup__type').textContent = housingTypeToName[previewAd.offer.type];
-    newCard.querySelector('.popup__text--capacity').textContent = previewAd.offer.rooms + ' комнаты для ' + previewAd.offer.guests + ' гостей';
-    newCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + previewAd.offer.checkin + ', выезд до ' + previewAd.offer.checkout;
+    newCard.querySelector('.popup__text--capacity').textContent = previewAd.offer.rooms + ' комнаты для ' +
+      previewAd.offer.guests + ' гостей';
+    newCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + previewAd.offer.checkin +
+      ', выезд до ' + previewAd.offer.checkout;
     newCard.querySelector('.popup__description').textContent = previewAd.offer.description;
     newCard.querySelector('.popup__avatar').src = previewAd.author.avatar;
 
@@ -50,12 +50,14 @@ window.card = (function () {
     var photosPopupElement = newCard.querySelector('.popup__photos');
     var photoPopupElement = newCard.querySelector('.popup__photos .popup__photo');
     var photoPopupFragment = document.createDocumentFragment();
+
     while (photosPopupElement.firstChild) {
       photosPopupElement.removeChild(photosPopupElement.firstChild);
     }
 
     previewAd.offer.photos.forEach(function (photo) {
       var newPhoto = photoPopupElement.cloneNode(true);
+
       newPhoto.src = photo;
       photoPopupFragment.appendChild(newPhoto);
     });
