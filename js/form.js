@@ -12,6 +12,7 @@ window.form = (function () {
   var adFormTimeOutInputElement = adFormElement.querySelector('#timeout');
 
   var mapElement = document.querySelector('.map');
+  var mainPinElement = mapElement.querySelector('.map__pin--main');
 
   var housingTypeToPrice = {
     'palace': {
@@ -61,6 +62,23 @@ window.form = (function () {
     adFormFieldsetsElement.forEach(function (fieldset) {
       fieldset.disabled = false;
     });
+
+    adFormAddressInputElement.readOnly = true;
+  };
+
+  var getAddress = function () {
+    var locationX = mainPinElement.offsetLeft + window.constants.MAIN_PIN_WIDTH / 2;
+    var locationY = mapElement.classList.contains('map--faded') ?
+      mainPinElement.offsetTop + window.constants.MAIN_PIN_WIDTH / 2 :
+      mainPinElement.offsetTop + window.constants.MAIN_PIN_HEIGHT;
+
+    var location = locationX + ', ' + locationY;
+
+    return location;
+  };
+
+  var setAddressInputValue = function () {
+    adFormAddressInputElement.value = getAddress();
   };
 
   var typeInputHandler = function () {
@@ -74,33 +92,10 @@ window.form = (function () {
     var priceValue = adFormPriceInputElement.value;
 
     var currentType = housingTypeToPrice[typeValue];
-    var validityMessage = '';
 
-    if (priceValue < currentType['minPrice']) {
-      validityMessage = currentType['validityMessage'];
-    }
+    var validityMessage = priceValue < currentType['minPrice'] ? currentType['validityMessage'] : '';
 
     adFormPriceInputElement.setCustomValidity(validityMessage);
-  };
-
-  var getAddress = function () {
-    var locationX = window.constants.MAIN_PIN_DEFAULT_X + window.constants.MAIN_PIN_WIDTH / 2;
-    var locationY;
-
-    if (mapElement.classList.contains('map--faded')) {
-      locationY = window.constants.MAIN_PIN_DEFAULT_Y + window.constants.MAIN_PIN_WIDTH / 2;
-    } else {
-      locationY = window.constants.MAIN_PIN_DEFAULT_Y + window.constants.MAIN_PIN_HEIGHT;
-    }
-
-    var location = locationX + ', ' + locationY;
-
-    return location;
-  };
-
-  var setAddressInputValue = function () {
-    adFormAddressInputElement.value = getAddress();
-    adFormAddressInputElement.readOnly = true;
   };
 
   var roomsQuantityInputHandler = function () {
@@ -133,16 +128,19 @@ window.form = (function () {
     }
   };
 
+  setAddressInputValue();
+  disableFormInputs();
+
   adFormTypeInputElement.addEventListener('input', typeInputHandler);
   adFormTypeInputElement.addEventListener('input', priceInputHandler);
   adFormPriceInputElement.addEventListener('input', priceInputHandler);
+  adFormRoomsInputElement.addEventListener('input', roomsQuantityInputHandler);
+  adFormGuestsInputElement.addEventListener('input', roomsQuantityInputHandler);
   adFormTimeInInputElement.addEventListener('input', checktimeInputHandler);
   adFormTimeOutInputElement.addEventListener('input', checktimeInputHandler);
 
   return {
-    disableFormInputs: disableFormInputs,
     enableFormInputs: enableFormInputs,
     setAddressInputValue: setAddressInputValue,
-    roomsQuantityInputHandler: roomsQuantityInputHandler,
   };
 })();

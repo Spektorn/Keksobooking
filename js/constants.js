@@ -57,8 +57,6 @@ window.constants = (function () {
   var PIN_HEIGHT = 70;
   var MAIN_PIN_WIDTH = 62;
   var MAIN_PIN_HEIGHT = 84;
-  var MAIN_PIN_DEFAULT_X = 570;
-  var MAIN_PIN_DEFAULT_Y = 375;
 
   return {
     ADS_QUANTITY: ADS_QUANTITY,
@@ -77,7 +75,5 @@ window.constants = (function () {
     PIN_HEIGHT: PIN_HEIGHT,
     MAIN_PIN_WIDTH: MAIN_PIN_WIDTH,
     MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
-    MAIN_PIN_DEFAULT_X: MAIN_PIN_DEFAULT_X,
-    MAIN_PIN_DEFAULT_Y: MAIN_PIN_DEFAULT_Y,
   };
 })();
