@@ -53,6 +53,7 @@ window.map = (function () {
 
   var mainPinClickHandler = function (evt) {
     if (evt.button === 0) {
+      evt.preventDefault();
       activatePage();
       mainPinElement.removeEventListener('mousedown', mainPinClickHandler);
       mainPinElement.removeEventListener('keydown', mainPinPressEnterHandler);
@@ -61,6 +62,7 @@ window.map = (function () {
 
   var mainPinPressEnterHandler = function (evt) {
     if (evt.key === 'Enter') {
+      evt.preventDefault();
       activatePage();
       mainPinElement.removeEventListener('mousedown', mainPinClickHandler);
       mainPinElement.removeEventListener('keydown', mainPinPressEnterHandler);

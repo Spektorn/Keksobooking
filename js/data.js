@@ -19,7 +19,7 @@ window.data = (function () {
     return currentAvatar;
   };
 
-  var getRandomAds = function (avatars) {
+  var generateRandomAds = function (avatars) {
     var ads = [];
 
     for (var i = 0; i < window.constants.ADS_QUANTITY; i++) {
@@ -32,17 +32,17 @@ window.data = (function () {
           'avatar': getAvatar(avatars),
         },
         'offer': {
-          'title': window.utilities.getRandomArrValue(window.constants.TITLE_PATTERN),
+          'title': window.utilities.getRandomArrValue(window.constants.TITLE_PATTERNS),
           'address': randomX + ', ' + randomY,
           'price': window.utilities.getRandomInt(1000, 15000),
-          'type': window.utilities.getRandomArrValue(window.constants.TYPE_PATTERN),
+          'type': window.utilities.getRandomArrValue(window.constants.TYPE_PATTERNS),
           'rooms': window.utilities.getRandomInt(1, 6),
           'guests': window.utilities.getRandomInt(1, 6),
-          'checkin': window.utilities.getRandomArrValue(window.constants.CHECKTIME_PATTERN),
-          'checkout': window.utilities.getRandomArrValue(window.constants.CHECKTIME_PATTERN),
-          'features': window.utilities.getSeveralRandomArrValues(window.constants.FEATURES_PATTERN),
-          'description': window.utilities.getRandomArrValue(window.constants.DESCRIPTION_PATTERN),
-          'photos': window.utilities.getSeveralRandomArrValues(window.constants.PHOTOS_PATTERN),
+          'checkin': window.utilities.getRandomArrValue(window.constants.CHECKTIME_PATTERNS),
+          'checkout': window.utilities.getRandomArrValue(window.constants.CHECKTIME_PATTERNS),
+          'features': window.utilities.getSeveralRandomArrValues(window.constants.FEATURES_PATTERNS),
+          'description': window.utilities.getRandomArrValue(window.constants.DESCRIPTION_PATTERNS),
+          'photos': window.utilities.getSeveralRandomArrValues(window.constants.PHOTOS_PATTERNS),
         },
         'location': {
           'x': randomX,
@@ -57,7 +57,7 @@ window.data = (function () {
   };
 
   var avatars = generateAvatars(window.constants.USERS_QUANTITY);
-  var ads = getRandomAds(avatars);
+  var ads = generateRandomAds(avatars);
 
   return {
     ads: ads,

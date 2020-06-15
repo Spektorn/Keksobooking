@@ -92,7 +92,6 @@ window.form = (function () {
     var priceValue = adFormPriceInputElement.value;
 
     var currentType = housingTypeToPrice[typeValue];
-
     var validityMessage = priceValue < currentType['minPrice'] ? currentType['validityMessage'] : '';
 
     adFormPriceInputElement.setCustomValidity(validityMessage);

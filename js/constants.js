@@ -4,13 +4,13 @@ window.constants = (function () {
   var ADS_QUANTITY = 8;
   var USERS_QUANTITY = 8;
 
-  var TYPE_PATTERN = [
+  var TYPE_PATTERNS = [
     'palace',
     'flat',
     'house',
     'bungalo',
   ];
-  var TITLE_PATTERN = [
+  var TITLE_PATTERNS = [
     'Огромное поместье на окраине города',
     'Загородное поместье напротив лесной чащи',
     'Просторная квартира в центре города',
@@ -20,7 +20,7 @@ window.constants = (function () {
     'Загородное бунгало',
     'Бунгало напротив живописного парка',
   ];
-  var DESCRIPTION_PATTERN = [
+  var DESCRIPTION_PATTERNS = [
     'Лучшее жилье в целом Токио!',
     'Небольшая уютная квартира в тихом районе города',
     'Комфортабельные апартаменты в центре города',
@@ -30,12 +30,12 @@ window.constants = (function () {
     'Загородное бунгало с завораживающим видом на горные хребты',
     'Прекрасно обустроенное бунгало недалеко от центрального парка',
   ];
-  var CHECKTIME_PATTERN = [
+  var CHECKTIME_PATTERNS = [
     '12:00',
     '13:00',
     '14:00',
   ];
-  var FEATURES_PATTERN = [
+  var FEATURES_PATTERNS = [
     'wifi',
     'dishwasher',
     'parking',
@@ -43,7 +43,7 @@ window.constants = (function () {
     'elevator',
     'conditioner',
   ];
-  var PHOTOS_PATTERN = [
+  var PHOTOS_PATTERNS = [
     'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
@@ -61,12 +61,12 @@ window.constants = (function () {
   return {
     ADS_QUANTITY: ADS_QUANTITY,
     USERS_QUANTITY: USERS_QUANTITY,
-    TYPE_PATTERN: TYPE_PATTERN,
-    TITLE_PATTERN: TITLE_PATTERN,
-    DESCRIPTION_PATTERN: DESCRIPTION_PATTERN,
-    CHECKTIME_PATTERN: CHECKTIME_PATTERN,
-    FEATURES_PATTERN: FEATURES_PATTERN,
-    PHOTOS_PATTERN: PHOTOS_PATTERN,
+    TYPE_PATTERNS: TYPE_PATTERNS,
+    TITLE_PATTERNS: TITLE_PATTERNS,
+    DESCRIPTION_PATTERNS: DESCRIPTION_PATTERNS,
+    CHECKTIME_PATTERNS: CHECKTIME_PATTERNS,
+    FEATURES_PATTERNS: FEATURES_PATTERNS,
+    PHOTOS_PATTERNS: PHOTOS_PATTERNS,
     X_MIN: X_MIN,
     X_MAX: X_MAX,
     Y_MIN: Y_MIN,

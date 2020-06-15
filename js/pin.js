@@ -8,7 +8,7 @@ window.pin = (function () {
 
     newPin.id = ad.id;
     newPin.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
-    newPin.style.top = ad.location.y - window.constants.PIN_HEIGHT + 'px';
+    newPin.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
     newPin.querySelector('img').src = ad.author.avatar;
     newPin.querySelector('img').alt = ad.offer.title;
 
@@ -16,13 +16,13 @@ window.pin = (function () {
   };
 
   var renderPinFragment = function (ads) {
-    var fragment = document.createDocumentFragment();
+    var newFragment = document.createDocumentFragment();
 
     ads.forEach(function (ad) {
-      fragment.appendChild(renderPin(ad));
+      newFragment.appendChild(renderPin(ad));
     });
 
-    return fragment;
+    return newFragment;
   };
 
   var pinFragment = renderPinFragment(window.data.ads);
