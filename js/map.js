@@ -45,7 +45,9 @@ window.map = (function () {
     window.form.enableFormInputs();
     window.form.setAddressInputValue();
 
-    pinsListElement.appendChild(window.pin.pinFragment);
+    window.load(function (data) {
+      window.pin.renderPinFragment(data, pinsListElement);
+    });
 
     pinsListElement.addEventListener('click', pinClickHandler);
     pinsListElement.addEventListener('keydown', pinPressEnterHandler);

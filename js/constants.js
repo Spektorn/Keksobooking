@@ -58,6 +58,8 @@ window.constants = (function () {
   var MAIN_PIN_WIDTH = 62;
   var MAIN_PIN_HEIGHT = 84;
 
+  var LOAD_URL = 'https://javascript.pages.academy/keksobooking/data';
+
   return {
     ADS_QUANTITY: ADS_QUANTITY,
     USERS_QUANTITY: USERS_QUANTITY,
@@ -75,5 +77,6 @@ window.constants = (function () {
     PIN_HEIGHT: PIN_HEIGHT,
     MAIN_PIN_WIDTH: MAIN_PIN_WIDTH,
     MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
+    LOAD_URL: LOAD_URL,
   };
 })();
