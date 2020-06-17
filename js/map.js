@@ -45,7 +45,9 @@ window.map = (function () {
     window.form.enableFormInputs();
     window.form.setAddressInputValue();
 
-    pinsListElement.appendChild(window.pin.pinFragment);
+    window.load(function (data) {
+      window.pin.renderPinFragment(data, pinsListElement);
+    });
 
     pinsListElement.addEventListener('click', pinClickHandler);
     pinsListElement.addEventListener('keydown', pinPressEnterHandler);
@@ -53,6 +55,7 @@ window.map = (function () {
 
   var mainPinClickHandler = function (evt) {
     if (evt.button === 0) {
+      evt.preventDefault();
       activatePage();
       mainPinElement.removeEventListener('mousedown', mainPinClickHandler);
       mainPinElement.removeEventListener('keydown', mainPinPressEnterHandler);
@@ -61,6 +64,7 @@ window.map = (function () {
 
   var mainPinPressEnterHandler = function (evt) {
     if (evt.key === 'Enter') {
+      evt.preventDefault();
       activatePage();
       mainPinElement.removeEventListener('mousedown', mainPinClickHandler);
       mainPinElement.removeEventListener('keydown', mainPinPressEnterHandler);
