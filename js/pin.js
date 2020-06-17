@@ -1,12 +1,12 @@
 'use strict';
 
 window.pin = (function () {
-  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var pinTemplateElement = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  var renderPin = function (ad, adID) {
-    var newPin = pinTemplate.cloneNode(true);
+  var renderPin = function (ad) {
+    var newPin = pinTemplateElement.cloneNode(true);
 
-    newPin.id = adID;
+    newPin.id = ad.id;
     newPin.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
     newPin.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
     newPin.querySelector('img').src = ad.author.avatar;
@@ -17,11 +17,11 @@ window.pin = (function () {
 
   var renderPinFragment = function (ads, parentElement) {
     var newFragment = document.createDocumentFragment();
-    var currentPinID = 1;
 
     ads.forEach(function (ad) {
-      newFragment.appendChild(renderPin(ad, currentPinID));
-      currentPinID++;
+      if (ad.offer) {
+        newFragment.appendChild(renderPin(ad));
+      }
     });
 
     parentElement.appendChild(newFragment);
