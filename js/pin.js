@@ -4,18 +4,18 @@ window.pin = (function () {
   var pinTemplateElement = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var renderPin = function (ad) {
-    var newPin = pinTemplateElement.cloneNode(true);
+    var newPinElement = pinTemplateElement.cloneNode(true);
 
-    newPin.id = ad.id;
-    newPin.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
-    newPin.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
-    newPin.querySelector('img').src = ad.author.avatar;
-    newPin.querySelector('img').alt = ad.offer.title;
+    newPinElement.id = ad.id;
+    newPinElement.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
+    newPinElement.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
+    newPinElement.querySelector('img').src = ad.author.avatar;
+    newPinElement.querySelector('img').alt = ad.offer.title;
 
-    return newPin;
+    return newPinElement;
   };
 
-  var renderPinFragment = function (ads, parentElement) {
+  var renderPinFragment = function (ads) {
     var newFragment = document.createDocumentFragment();
 
     ads.forEach(function (ad) {
@@ -24,7 +24,7 @@ window.pin = (function () {
       }
     });
 
-    parentElement.appendChild(newFragment);
+    return newFragment;
   };
 
   return {

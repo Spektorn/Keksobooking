@@ -9,7 +9,7 @@
       onSuccess(xhr.response);
     });
 
-    xhr.open('GET', window.constants.LOAD_URL);
+    xhr.open('GET', window.constants.API_URL + 'data');
     xhr.send();
   };
 })();

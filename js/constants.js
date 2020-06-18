@@ -60,8 +60,7 @@ window.constants = (function () {
   var MAIN_PIN_DEFAULT_X = 570;
   var MAIN_PIN_DEFAULT_Y = 375;
 
-  var LOAD_URL = 'https://javascript.pages.academy/keksobooking/data';
-  var UPLOAD_URL = 'https://javascript.pages.academy/keksobooking';
+  var API_URL = 'https://javascript.pages.academy/keksobooking/';
 
   return {
     ADS_QUANTITY: ADS_QUANTITY,
@@ -82,7 +81,6 @@ window.constants = (function () {
     MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
     MAIN_PIN_DEFAULT_X: MAIN_PIN_DEFAULT_X,
     MAIN_PIN_DEFAULT_Y: MAIN_PIN_DEFAULT_Y,
-    LOAD_URL: LOAD_URL,
-    UPLOAD_URL: UPLOAD_URL,
+    API_URL: API_URL,
   };
 })();

@@ -17,7 +17,7 @@
       }
     });
 
-    xhr.open('POST', window.constants.UPLOAD_URL);
+    xhr.open('POST', window.constants.API_URL);
     xhr.send(data);
   };
 })();

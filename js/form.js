@@ -1,7 +1,7 @@
 'use strict';
 
 window.form = (function () {
-  var pageMain = document.querySelector('main');
+  var pageMainElement = document.querySelector('main');
 
   var adFormElement = document.querySelector('.ad-form');
   var adFormFieldsetsElement = adFormElement.querySelectorAll('fieldset');
@@ -131,36 +131,37 @@ window.form = (function () {
 
   var renderSubmitMessage = function (type) {
     var messageTemplateElement = document.querySelector('#' + type).content.querySelector('.' + type);
-    var newMessage = messageTemplateElement.cloneNode(true);
+    var newMessageElement = messageTemplateElement.cloneNode(true);
 
-    var messageClickHandler = function (evt) {
+    var closeMessage = function (evt) {
       evt.preventDefault();
-      newMessage.remove();
 
-      document.removeEventListener('click', messageClickHandler);
-      document.removeEventListener('keydown', messagePressEscHandler);
+      newMessageElement.remove();
+
+      document.removeEventListener('click', messageCloseClickHandler);
+      document.removeEventListener('keydown', messageClosePressEscHandler);
     };
 
-    var messagePressEscHandler = function (evt) {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        newMessage.remove();
+    var messageCloseClickHandler = function (evt) {
+      closeMessage(evt);
+    };
 
-        document.removeEventListener('click', messageClickHandler);
-        document.removeEventListener('keydown', messagePressEscHandler);
+    var messageClosePressEscHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        closeMessage(evt);
       }
     };
 
-    document.addEventListener('click', messageClickHandler);
-    document.addEventListener('keydown', messagePressEscHandler);
+    document.addEventListener('click', messageCloseClickHandler);
+    document.addEventListener('keydown', messageClosePressEscHandler);
 
     if (type === 'error') {
-      var messageButtonElement = newMessage.querySelector('.error__button');
+      var newMessageButtonElement = newMessageElement.querySelector('.error__button');
 
-      messageButtonElement.addEventListener('click', messageClickHandler);
+      newMessageButtonElement.addEventListener('click', messageCloseClickHandler);
     }
 
-    pageMain.appendChild(newMessage);
+    pageMainElement.appendChild(newMessageElement);
   };
 
   var submitSuccessHandler = function () {

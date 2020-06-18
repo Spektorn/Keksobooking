@@ -39,17 +39,18 @@ window.map = (function () {
     mapElement.classList.remove('map--faded');
     adFormElement.classList.remove('ad-form--disabled');
 
-    window.form.enableFormInputs();
-    window.form.setAddressInputValue();
-
     window.load(function (data) {
       var ads = window.data.loadAdsHandler(data);
+      var pinFragment = window.pin.renderPinFragment(ads);
 
-      window.pin.renderPinFragment(ads, pinsListElement);
+      pinsListElement.appendChild(pinFragment);
     });
 
     pinsListElement.addEventListener('click', pinClickHandler);
     pinsListElement.addEventListener('keydown', pinPressEnterHandler);
+
+    window.form.enableFormInputs();
+    window.form.setAddressInputValue();
   };
 
   var deactivatePage = function () {
@@ -60,8 +61,6 @@ window.map = (function () {
     mainPinElement.style.left = window.constants.MAIN_PIN_DEFAULT_X + 'px';
     mainPinElement.addEventListener('mousedown', mainPinClickHandler);
     mainPinElement.addEventListener('keydown', mainPinPressEnterHandler);
-
-    window.form.disableFormInputs();
 
     if (mapElement.querySelector('.map__card')) {
       mapElement.querySelector('.map__card').remove();
@@ -75,16 +74,20 @@ window.map = (function () {
 
     pinsListElement.removeEventListener('click', pinClickHandler);
     pinsListElement.removeEventListener('keydown', pinPressEnterHandler);
+
+    window.form.disableFormInputs();
   };
 
   var pinClickHandler = function (evt) {
     evt.preventDefault();
+
     showCard(evt);
   };
 
   var pinPressEnterHandler = function (evt) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
+
       showCard(evt);
     }
   };
@@ -92,6 +95,7 @@ window.map = (function () {
   var mainPinClickHandler = function (evt) {
     if (evt.button === 0) {
       evt.preventDefault();
+
       activatePage();
 
       mainPinElement.removeEventListener('mousedown', mainPinClickHandler);
@@ -102,6 +106,7 @@ window.map = (function () {
   var mainPinPressEnterHandler = function (evt) {
     if (evt.key === 'Enter') {
       evt.preventDefault();
+
       activatePage();
 
       mainPinElement.removeEventListener('mousedown', mainPinClickHandler);
@@ -155,6 +160,7 @@ window.map = (function () {
 
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
+
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
     };
