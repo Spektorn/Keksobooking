@@ -14,6 +14,7 @@ window.data = (function () {
   var getAvatar = function (avatars) {
     var currentAvatarIndex = window.utilities.getRandomInt(0, avatars.length - 1);
     var currentAvatar = avatars[currentAvatarIndex];
+
     avatars.splice(currentAvatarIndex, 1);
 
     return currentAvatar;
@@ -56,10 +57,20 @@ window.data = (function () {
     return ads;
   };
 
-  var avatars = generateAvatars(window.constants.USERS_QUANTITY);
-  var ads = generateRandomAds(avatars);
+  var loadAdsHandler = function (data) {
+    var currentAdID = 1;
+
+    data.forEach(function (ad) {
+      ad.id = currentAdID;
+      currentAdID++;
+    });
+
+    return data;
+  };
 
   return {
-    ads: ads,
+    generateAvatars: generateAvatars,
+    generateRandomAds: generateRandomAds,
+    loadAdsHandler: loadAdsHandler,
   };
 })();

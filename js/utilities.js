@@ -17,6 +17,7 @@ window.utilities = (function () {
     for (var i = 0; i < elementsQuantity; i++) {
       var currentValueIndex = getRandomInt(0, allValues.length - 1);
       var currentValue = allValues[currentValueIndex];
+
       allValues.splice(currentValueIndex, 1);
       selectedValues.push(currentValue);
     }

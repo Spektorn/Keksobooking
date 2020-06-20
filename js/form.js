@@ -1,6 +1,8 @@
 'use strict';
 
 window.form = (function () {
+  var pageMainElement = document.querySelector('main');
+
   var adFormElement = document.querySelector('.ad-form');
   var adFormFieldsetsElement = adFormElement.querySelectorAll('fieldset');
   var adFormTypeInputElement = adFormElement.querySelector('#type');
@@ -127,19 +129,68 @@ window.form = (function () {
     }
   };
 
-  setAddressInputValue();
-  disableFormInputs();
+  var renderSubmitMessage = function (type) {
+    var messageTemplateElement = document.querySelector('#' + type).content.querySelector('.' + type);
+    var newMessageElement = messageTemplateElement.cloneNode(true);
 
-  adFormTypeInputElement.addEventListener('input', typeInputHandler);
-  adFormTypeInputElement.addEventListener('input', priceInputHandler);
-  adFormPriceInputElement.addEventListener('input', priceInputHandler);
-  adFormRoomsInputElement.addEventListener('input', roomsQuantityInputHandler);
-  adFormGuestsInputElement.addEventListener('input', roomsQuantityInputHandler);
-  adFormTimeInInputElement.addEventListener('input', checktimeInputHandler);
-  adFormTimeOutInputElement.addEventListener('input', checktimeInputHandler);
+    var closeMessage = function (evt) {
+      evt.preventDefault();
+
+      newMessageElement.remove();
+
+      document.removeEventListener('click', messageCloseClickHandler);
+      document.removeEventListener('keydown', messageClosePressEscHandler);
+    };
+
+    var messageCloseClickHandler = function (evt) {
+      closeMessage(evt);
+    };
+
+    var messageClosePressEscHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        closeMessage(evt);
+      }
+    };
+
+    document.addEventListener('click', messageCloseClickHandler);
+    document.addEventListener('keydown', messageClosePressEscHandler);
+
+    if (type === 'error') {
+      var newMessageButtonElement = newMessageElement.querySelector('.error__button');
+
+      newMessageButtonElement.addEventListener('click', messageCloseClickHandler);
+    }
+
+    pageMainElement.appendChild(newMessageElement);
+  };
+
+  var submitSuccessHandler = function () {
+    renderSubmitMessage('success');
+    adFormElement.reset();
+  };
+
+  var submitErrorHandler = function () {
+    renderSubmitMessage('error');
+  };
+
+  var adFormSubmitHandler = function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(adFormElement), submitSuccessHandler, submitErrorHandler);
+  };
+
+  var adFormResetHandler = function () {
+    window.map.deactivatePage();
+  };
 
   return {
     enableFormInputs: enableFormInputs,
+    disableFormInputs: disableFormInputs,
     setAddressInputValue: setAddressInputValue,
+    typeInputHandler: typeInputHandler,
+    priceInputHandler: priceInputHandler,
+    roomsQuantityInputHandler: roomsQuantityInputHandler,
+    checktimeInputHandler: checktimeInputHandler,
+    adFormSubmitHandler: adFormSubmitHandler,
+    adFormResetHandler: adFormResetHandler,
   };
 })();

@@ -1,30 +1,30 @@
 'use strict';
 
 window.pin = (function () {
-  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var pinTemplateElement = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  var renderPin = function (ad, adID) {
-    var newPin = pinTemplate.cloneNode(true);
+  var renderPin = function (ad) {
+    var newPinElement = pinTemplateElement.cloneNode(true);
 
-    newPin.id = adID;
-    newPin.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
-    newPin.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
-    newPin.querySelector('img').src = ad.author.avatar;
-    newPin.querySelector('img').alt = ad.offer.title;
+    newPinElement.id = ad.id;
+    newPinElement.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
+    newPinElement.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
+    newPinElement.querySelector('img').src = ad.author.avatar;
+    newPinElement.querySelector('img').alt = ad.offer.title;
 
-    return newPin;
+    return newPinElement;
   };
 
-  var renderPinFragment = function (ads, parentElement) {
+  var renderPinFragment = function (ads) {
     var newFragment = document.createDocumentFragment();
-    var currentPinID = 1;
 
     ads.forEach(function (ad) {
-      newFragment.appendChild(renderPin(ad, currentPinID));
-      currentPinID++;
+      if (ad.offer) {
+        newFragment.appendChild(renderPin(ad));
+      }
     });
 
-    parentElement.appendChild(newFragment);
+    return newFragment;
   };
 
   return {
