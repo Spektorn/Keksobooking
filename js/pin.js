@@ -7,8 +7,8 @@ window.pin = (function () {
     var newPinElement = pinTemplateElement.cloneNode(true);
 
     newPinElement.id = ad.id;
-    newPinElement.style.left = (ad.location.x - window.constants.PIN_WIDTH / 2) + 'px';
-    newPinElement.style.top = (ad.location.y - window.constants.PIN_HEIGHT) + 'px';
+    newPinElement.style.left = (ad.location.x - window.constants.Pin.WIDTH / 2) + 'px';
+    newPinElement.style.top = (ad.location.y - window.constants.Pin.HEIGHT) + 'px';
     newPinElement.querySelector('img').src = ad.author.avatar;
     newPinElement.querySelector('img').alt = ad.offer.title;
 

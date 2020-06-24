@@ -24,8 +24,10 @@ window.data = (function () {
     var ads = [];
 
     for (var i = 0; i < window.constants.ADS_QUANTITY; i++) {
-      var randomX = window.utilities.getRandomInt(window.constants.X_MIN, window.constants.X_MAX);
-      var randomY = window.utilities.getRandomInt(window.constants.Y_MIN, window.constants.Y_MAX);
+      var randomX = window.utilities.getRandomInt(window.constants.CoordinatesLimit.X_MIN,
+          window.constants.CoordinatesLimit.X_MAX);
+      var randomY = window.utilities.getRandomInt(window.constants.CoordinatesLimit.Y_MIN,
+          window.constants.CoordinatesLimit.Y_MAX);
 
       var newAd = {
         'id': 'ad-' + (i + 1),
@@ -33,17 +35,17 @@ window.data = (function () {
           'avatar': getAvatar(avatars),
         },
         'offer': {
-          'title': window.utilities.getRandomArrValue(window.constants.TITLE_PATTERNS),
+          'title': window.utilities.getRandomArrValue(window.constants.AdPattern.TITLES),
           'address': randomX + ', ' + randomY,
           'price': window.utilities.getRandomInt(1000, 15000),
-          'type': window.utilities.getRandomArrValue(window.constants.TYPE_PATTERNS),
+          'type': window.utilities.getRandomArrValue(window.constants.AdPattern.TYPES),
           'rooms': window.utilities.getRandomInt(1, 6),
           'guests': window.utilities.getRandomInt(1, 6),
-          'checkin': window.utilities.getRandomArrValue(window.constants.CHECKTIME_PATTERNS),
-          'checkout': window.utilities.getRandomArrValue(window.constants.CHECKTIME_PATTERNS),
-          'features': window.utilities.getSeveralRandomArrValues(window.constants.FEATURES_PATTERNS),
-          'description': window.utilities.getRandomArrValue(window.constants.DESCRIPTION_PATTERNS),
-          'photos': window.utilities.getSeveralRandomArrValues(window.constants.PHOTOS_PATTERNS),
+          'checkin': window.utilities.getRandomArrValue(window.constants.AdPattern.CHECKTIMES),
+          'checkout': window.utilities.getRandomArrValue(window.constants.AdPattern.CHECKTIMES),
+          'features': window.utilities.getSeveralRandomArrValues(window.constants.AdPattern.FEATURES),
+          'description': window.utilities.getRandomArrValue(window.constants.AdPattern.DESCRIPTIONS),
+          'photos': window.utilities.getSeveralRandomArrValues(window.constants.AdPattern.PHOTOS),
         },
         'location': {
           'x': randomX,
@@ -57,20 +59,20 @@ window.data = (function () {
     return ads;
   };
 
-  var loadAdsHandler = function (data) {
+  var generateLoadedAdID = function (ads) {
     var currentAdID = 1;
 
-    data.forEach(function (ad) {
+    ads.forEach(function (ad) {
       ad.id = currentAdID;
       currentAdID++;
     });
 
-    return data;
+    return ads;
   };
 
   return {
     generateAvatars: generateAvatars,
     generateRandomAds: generateRandomAds,
-    loadAdsHandler: loadAdsHandler,
+    generateLoadedAdID: generateLoadedAdID,
   };
 })();
