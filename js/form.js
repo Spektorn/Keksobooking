@@ -69,10 +69,10 @@ window.form = (function () {
   };
 
   var getAddress = function () {
-    var locationX = mainPinElement.offsetLeft + window.constants.MAIN_PIN_WIDTH / 2;
+    var locationX = mainPinElement.offsetLeft + window.constants.MainPin.WIDTH / 2;
     var locationY = mapElement.classList.contains('map--faded') ?
-      mainPinElement.offsetTop + window.constants.MAIN_PIN_WIDTH / 2 :
-      mainPinElement.offsetTop + window.constants.MAIN_PIN_HEIGHT;
+      mainPinElement.offsetTop + window.constants.MainPin.WIDTH / 2 :
+      mainPinElement.offsetTop + window.constants.MainPin.HEIGHT;
 
     var location = locationX + ', ' + locationY;
 
@@ -129,7 +129,7 @@ window.form = (function () {
     }
   };
 
-  var renderSubmitMessage = function (type) {
+  var renderLoadStatusMessage = function (type) {
     var messageTemplateElement = document.querySelector('#' + type).content.querySelector('.' + type);
     var newMessageElement = messageTemplateElement.cloneNode(true);
 
@@ -165,12 +165,12 @@ window.form = (function () {
   };
 
   var submitSuccessHandler = function () {
-    renderSubmitMessage('success');
+    renderLoadStatusMessage('success');
     adFormElement.reset();
   };
 
   var submitErrorHandler = function () {
-    renderSubmitMessage('error');
+    renderLoadStatusMessage('error');
   };
 
   var adFormSubmitHandler = function (evt) {
@@ -185,6 +185,7 @@ window.form = (function () {
   return {
     enableFormInputs: enableFormInputs,
     disableFormInputs: disableFormInputs,
+    renderLoadStatusMessage: renderLoadStatusMessage,
     setAddressInputValue: setAddressInputValue,
     typeInputHandler: typeInputHandler,
     priceInputHandler: priceInputHandler,
