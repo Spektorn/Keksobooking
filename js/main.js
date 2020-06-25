@@ -1,10 +1,14 @@
 'use strict';
 var mapElement = document.querySelector('.map');
 var mainPinElement = mapElement.querySelector('.map__pin--main');
+var mapFiltersFormElement = mapElement.querySelector('.map__filters');
+
+window.map.disableFiltersInputs();
 
 mainPinElement.addEventListener('mousedown', window.map.mainPinClickHandler);
 mainPinElement.addEventListener('keydown', window.map.mainPinPressEnterHandler);
 mainPinElement.addEventListener('mousedown', window.map.mainPinMoveHandler);
+mapFiltersFormElement.addEventListener('change', window.map.filtersFormChangeHandler);
 
 var adFormElement = document.querySelector('.ad-form');
 var adFormTypeInputElement = adFormElement.querySelector('#type');
