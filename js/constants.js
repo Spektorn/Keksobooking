@@ -5,6 +5,7 @@ window.constants = (function () {
   var USERS_QUANTITY = 5;
 
   var DEFAULT_AVATAR = 'img/muffin-grey.svg';
+  var PHOTO_SIZE = 70;
 
   var API_URL = 'https://javascript.pages.academy/keksobooking/';
   var LOADING_TIMEOUT = 10000;
@@ -83,6 +84,7 @@ window.constants = (function () {
     ADS_QUANTITY: ADS_QUANTITY,
     USERS_QUANTITY: USERS_QUANTITY,
     DEFAULT_AVATAR: DEFAULT_AVATAR,
+    PHOTO_SIZE: PHOTO_SIZE,
     API_URL: API_URL,
     LOADING_TIMEOUT: LOADING_TIMEOUT,
     AdPattern: AdPattern,

@@ -136,13 +136,10 @@ window.form = (function () {
 
   var resetUploadedImages = function () {
     adFormAvatarPreviewElement.querySelector('img').src = window.constants.DEFAULT_AVATAR;
-
-    while (adFormPhotoPreviewElement.firstChild) {
-      adFormPhotoPreviewElement.removeChild(adFormPhotoPreviewElement.firstChild);
-    }
+    adFormPhotoPreviewElement.removeChild(adFormPhotoPreviewElement.firstChild);
   };
 
-  var uploadImage = function (imageInput, imagePreview, isMultiple) {
+  var uploadImage = function (imageInput, imagePreview, isCreated) {
     var file = imageInput.files[0];
     var fileType = file.type;
 
@@ -150,13 +147,17 @@ window.form = (function () {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        if (isMultiple) {
+        if (isCreated) {
+          if (imagePreview.firstChild) {
+            imagePreview.removeChild(imagePreview.firstChild);
+          }
+
           var newPhoto = document.createElement('img');
 
           newPhoto.src = reader.result;
           newPhoto.alt = 'Фотография жилья.';
-          newPhoto.width = 200;
-          newPhoto.height = 150;
+          newPhoto.width = window.constants.PHOTO_SIZE;
+          newPhoto.height = window.constants.PHOTO_SIZE;
 
           imagePreview.appendChild(newPhoto);
         } else {
