@@ -17,6 +17,8 @@ var adFormRoomsInputElement = adFormElement.querySelector('#room_number');
 var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
 var adFormTimeInInputElement = adFormElement.querySelector('#timein');
 var adFormTimeOutInputElement = adFormElement.querySelector('#timeout');
+var adFormAvatarInputElement = adFormElement.querySelector('#avatar');
+var adFormPhotoInputElement = adFormElement.querySelector('#images');
 
 window.form.disableFormInputs();
 
@@ -27,6 +29,8 @@ adFormRoomsInputElement.addEventListener('input', window.form.roomsQuantityInput
 adFormGuestsInputElement.addEventListener('input', window.form.roomsQuantityInputHandler);
 adFormTimeInInputElement.addEventListener('input', window.form.checktimeInputHandler);
 adFormTimeOutInputElement.addEventListener('input', window.form.checktimeInputHandler);
+adFormAvatarInputElement.addEventListener('change', window.form.avatarChangeHandler);
+adFormPhotoInputElement.addEventListener('change', window.form.photoChangeHandler);
 
 adFormElement.addEventListener('submit', window.form.adFormSubmitHandler);
 adFormElement.addEventListener('reset', window.form.adFormResetHandler);
