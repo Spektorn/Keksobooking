@@ -12,6 +12,11 @@ window.form = (function () {
   var adFormGuestsInputElement = adFormElement.querySelector('#capacity');
   var adFormTimeInInputElement = adFormElement.querySelector('#timein');
   var adFormTimeOutInputElement = adFormElement.querySelector('#timeout');
+  var adFormAvatarInputElement = adFormElement.querySelector('#avatar');
+  var adFormPhotoInputElement = adFormElement.querySelector('#images');
+
+  var adFormAvatarPreviewElement = adFormElement.querySelector('.ad-form-header__preview');
+  var adFormPhotoPreviewElement = adFormElement.querySelector('.ad-form__photo');
 
   var mapElement = document.querySelector('.map');
   var mainPinElement = mapElement.querySelector('.map__pin--main');
@@ -129,6 +134,49 @@ window.form = (function () {
     }
   };
 
+  var resetUploadedImages = function () {
+    adFormAvatarPreviewElement.querySelector('img').src = window.constants.DEFAULT_AVATAR;
+    adFormPhotoPreviewElement.removeChild(adFormPhotoPreviewElement.firstChild);
+  };
+
+  var uploadImage = function (imageInput, imagePreview, isCreated) {
+    var file = imageInput.files[0];
+    var fileType = file.type;
+
+    if (fileType.startsWith('image/')) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        if (isCreated) {
+          if (imagePreview.firstChild) {
+            imagePreview.removeChild(imagePreview.firstChild);
+          }
+
+          var newPhoto = document.createElement('img');
+
+          newPhoto.src = reader.result;
+          newPhoto.alt = 'Фотография жилья.';
+          newPhoto.width = window.constants.PHOTO_SIZE;
+          newPhoto.height = window.constants.PHOTO_SIZE;
+
+          imagePreview.appendChild(newPhoto);
+        } else {
+          imagePreview.querySelector('img').src = reader.result;
+        }
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  var avatarChangeHandler = function () {
+    uploadImage(adFormAvatarInputElement, adFormAvatarPreviewElement, false);
+  };
+
+  var photoChangeHandler = function () {
+    uploadImage(adFormPhotoInputElement, adFormPhotoPreviewElement, true);
+  };
+
   var renderLoadStatusMessage = function (type) {
     var messageTemplateElement = document.querySelector('#' + type).content.querySelector('.' + type);
     var newMessageElement = messageTemplateElement.cloneNode(true);
@@ -185,12 +233,15 @@ window.form = (function () {
   return {
     enableFormInputs: enableFormInputs,
     disableFormInputs: disableFormInputs,
+    resetUploadedImages: resetUploadedImages,
     renderLoadStatusMessage: renderLoadStatusMessage,
     setAddressInputValue: setAddressInputValue,
     typeInputHandler: typeInputHandler,
     priceInputHandler: priceInputHandler,
     roomsQuantityInputHandler: roomsQuantityInputHandler,
     checktimeInputHandler: checktimeInputHandler,
+    avatarChangeHandler: avatarChangeHandler,
+    photoChangeHandler: photoChangeHandler,
     adFormSubmitHandler: adFormSubmitHandler,
     adFormResetHandler: adFormResetHandler,
   };

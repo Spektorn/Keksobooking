@@ -124,6 +124,7 @@ window.map = (function () {
     pinsListElement.removeEventListener('keydown', pinPressEnterHandler);
 
     window.form.disableFormInputs();
+    window.form.resetUploadedImages();
   };
 
   var disableFiltersInputs = function () {
